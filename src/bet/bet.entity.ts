@@ -10,7 +10,7 @@ import {
     Table,
 } from 'sequelize-typescript';
 import { decimalModel } from '~/shared/utils/decimal';
-import { User } from '~/user/entity/user.entity';
+import { User } from '~/user/user.entity';
 
 @Table({
     tableName: 'bets',
@@ -26,21 +26,24 @@ export class Bet extends Model {
     declare id: number;
 
     @Column({
+        field: 'betAmount',
         ...decimalModel('betAmount', 19, 4),
     })
     declare betAmount: Decimal;
 
     @Column({
+        field: 'chance',
         ...decimalModel('chance', 4, 4),
     })
     declare chance: Decimal;
 
     @Column({
+        field: 'payout',
         ...decimalModel('payout', 19, 4),
     })
     declare payout: Decimal;
 
-    @Column({ type: DataType.BOOLEAN })
+    @Column({ type: DataType.BOOLEAN, field: 'win' })
     declare win: boolean;
 
     @ForeignKey(() => User)

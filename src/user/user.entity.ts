@@ -8,7 +8,7 @@ import {
     PrimaryKey,
     Table,
 } from 'sequelize-typescript';
-import { Bet } from '~/bet/entity/bet.entity';
+import { Bet } from '~/bet/bet.entity';
 import { decimalModel } from '~/shared/utils/decimal';
 
 @Table({
@@ -29,7 +29,7 @@ export class User extends Model {
 
     @Column({
         field: 'balance',
-        ...decimalModel('', 19, 4),
+        ...decimalModel('balance', 19, 4),
     })
     declare balance: Decimal;
 

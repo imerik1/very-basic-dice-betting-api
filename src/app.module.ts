@@ -1,8 +1,10 @@
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
+import { GraphQLModule } from '@nestjs/graphql';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { Bet } from '~/bet/entity/bet.entity';
-import { User } from '~/user/entity/user.entity';
+import { Bet } from './bet/bet.entity';
 import { BetModule } from './bet/bet.module';
+import { User } from './user/user.entity';
 import { UserModule } from './user/user.module';
 
 @Module({
@@ -15,6 +17,10 @@ import { UserModule } from './user/user.module';
             password: 'root',
             database: 'default',
             models: [User, Bet],
+        }),
+        GraphQLModule.forRoot<ApolloDriverConfig>({
+            driver: ApolloDriver,
+            autoSchemaFile: true,
         }),
         BetModule,
         UserModule,
