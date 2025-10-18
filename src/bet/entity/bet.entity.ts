@@ -31,7 +31,7 @@ export class Bet extends Model {
     declare betAmount: Decimal;
 
     @Column({
-        ...decimalModel('chance', 1, 4),
+        ...decimalModel('chance', 4, 4),
     })
     declare chance: Decimal;
 

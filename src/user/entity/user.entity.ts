@@ -24,7 +24,7 @@ export class User extends Model {
     @Column({ type: DataType.INTEGER, field: 'id' })
     declare id: number;
 
-    @Column({ type: DataType.STRING(50), field: 'balance' })
+    @Column({ type: DataType.STRING(50), field: 'name' })
     declare name: string;
 
     @Column({

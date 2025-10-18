@@ -13,7 +13,7 @@ import { UserModule } from './user/user.module';
             port: 3306,
             username: 'root',
             password: 'root',
-            database: 'test',
+            database: 'default',
             models: [User, Bet],
         }),
         BetModule,
