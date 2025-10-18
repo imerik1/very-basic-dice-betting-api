@@ -1,9 +1,9 @@
 // @ts-check
 import eslint from '@eslint/js';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
+import unusedImports from 'eslint-plugin-unused-imports';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
-import unusedImports from 'eslint-plugin-unused-imports';
 
 export default tseslint.config(
     {
@@ -38,6 +38,7 @@ export default tseslint.config(
             'unused-imports/no-unused-vars': 'off',
             '@typescript-eslint/no-unused-vars': 'error',
             '@typescript-eslint/no-unsafe-argument': 'warn',
+            '@typescript-eslint/no-unnecessary-type-assertion': 'off',
             'prettier/prettier': ['error', { endOfLine: 'auto' }],
         },
     },

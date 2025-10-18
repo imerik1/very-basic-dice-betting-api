@@ -22,7 +22,7 @@ export class UserService {
 
     async getUsers() {
         const userEntities = await this.userRepository.findAll();
-        return userEntities.map(this.toModel);
+        return userEntities.map(this.toModel.bind(this) as () => UserModel);
     }
 
     private toModel(userEntity: UserEntity) {

@@ -11,7 +11,7 @@ export const decimalModel = (
         type: DataType.DECIMAL(precision, rounding),
         get: function () {
             Decimal.set({ precision, rounding });
-            return new Decimal(this.getDataValue(columnName));
+            return new Decimal(this.getDataValue(columnName) as string);
         },
         set: function (value: Decimal) {
             this.setDataValue(columnName, value.toString());

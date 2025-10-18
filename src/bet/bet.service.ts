@@ -22,7 +22,7 @@ export class BetService {
 
     async getBets() {
         const betEntities = await this.betRepository.findAll();
-        return betEntities.map(this.toModel);
+        return betEntities.map(this.toModel.bind(this) as () => BetModel);
     }
 
     private toModel(betEntity: BetEntity) {
