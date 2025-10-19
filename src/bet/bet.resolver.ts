@@ -1,5 +1,5 @@
 import { Inject } from '@nestjs/common';
-import { Args, Int, Query, Resolver } from '@nestjs/graphql';
+import { Args, Float, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Bet } from './bet.model';
 import { BetService } from './bet.service';
 
@@ -15,5 +15,19 @@ export class BetResolver {
     @Query(() => [Bet!])
     async getBetList() {
         return this.betService.getBets();
+    }
+
+    @Query(() => [Bet!])
+    async getBestBetPerUser(@Args('limit', { type: () => Int }) limit: number) {
+        return this.betService.getAllBestBets(limit);
+    }
+
+    @Mutation(() => Bet)
+    async createBet(
+        @Args('userId', { type: () => Int }) userId: number,
+        @Args('betAmount', { type: () => Float }) betAmount: number,
+        @Args('chance', { type: () => Float }) chance: number,
+    ) {
+        return this.betService.createBet({ userId, betAmount, chance }, {});
     }
 }

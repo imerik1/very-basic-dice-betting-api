@@ -10,8 +10,9 @@ export const decimalModel = (
     return {
         type: DataType.DECIMAL(precision, rounding),
         get: function () {
-            Decimal.set({ precision, rounding });
-            return new Decimal(this.getDataValue(columnName) as string);
+            return new Decimal(
+                this.getDataValue(columnName) as string,
+            ).toDecimalPlaces(rounding, Decimal.ROUND_HALF_UP);
         },
         set: function (value: Decimal) {
             this.setDataValue(columnName, value.toString());
