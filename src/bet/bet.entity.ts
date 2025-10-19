@@ -33,9 +33,9 @@ export class Bet extends Model {
 
     @Column({
         field: 'chance',
-        ...decimalModel('chance', 4, 4),
+        type: DataType.FLOAT,
     })
-    declare chance: Decimal;
+    declare chance: number;
 
     @Column({
         field: 'payout',
