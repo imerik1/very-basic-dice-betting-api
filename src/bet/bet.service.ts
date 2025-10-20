@@ -80,6 +80,8 @@ export class BetService {
 
             const balance = await this.userService.checkBalance(values.userId);
 
+            console.log(balance);
+
             if (balance.minus(betAmount).isNegative()) {
                 throw new HttpException(
                     'Insufficient balance',

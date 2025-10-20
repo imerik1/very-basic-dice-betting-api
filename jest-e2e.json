@@ -1,0 +1,17 @@
+{
+    "moduleFileExtensions": ["js", "json", "ts"],
+    "rootDir": "src",
+    "testEnvironment": "node",
+    "testRegex": ".e2e.spec.ts$",
+    "transform": {
+        "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "moduleNameMapper": {
+        "~/(.*)": "<rootDir>/$1"
+    },
+    "coverageDirectory": "../coverage/e2e",
+    "coveragePathIgnorePatterns": [
+        "<rootDir>/.*\\.entity\\.ts$",
+        "<rootDir>/.*\\.model\\.ts$"
+    ]
+}
