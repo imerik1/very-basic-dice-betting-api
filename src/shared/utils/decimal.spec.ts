@@ -18,7 +18,7 @@ describe('Decimal Utils', () => {
 
         const { get } = decimalModel('balance', 10, 4);
 
-        const value = get!.call(mockThis);
+        const value = get!.call(mockThis) as Decimal;
 
         expect(value).toBeInstanceOf(Decimal);
         expect(value.toString()).toBe('123.4568');

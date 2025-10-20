@@ -14,7 +14,7 @@ describe('BetService', () => {
 
     let mockEntity: BetEntity;
 
-    beforeEach(async () => {
+    beforeEach(() => {
         betRepository = BetEntity;
         sequelize = { query: jest.fn() } as unknown as Sequelize;
         userService = {
@@ -47,7 +47,7 @@ describe('BetService', () => {
 
     it('should throw when not get bet by id', async () => {
         jest.spyOn(betRepository, 'findByPk').mockResolvedValueOnce(null);
-        expect(betService.getBetById(1)).rejects.toThrow(HttpException);
+        expect(await betService.getBetById(1)).toThrow(HttpException);
     });
 
     it('should get all bets', async () => {
@@ -67,7 +67,7 @@ describe('BetService', () => {
     it('should get all best bets by user and limit', async () => {
         jest.spyOn(sequelize, 'query').mockResolvedValueOnce([
             mockEntity,
-        ] as any);
+        ] as unknown as never);
 
         const result = await betService.getAllBestBets(1);
         expect(result[0].id).toBe(mockEntity.id);
@@ -80,41 +80,46 @@ describe('BetService', () => {
 
     it('should throw if creating bet chance is less than 0 or greater than 1', async () => {
         Object.assign(sequelize, {
-            transaction: (cb) => cb({} as Transaction),
+            transaction: (cb: (t: Transaction) => PromiseLike<Decimal>) =>
+                cb({} as Transaction),
         });
 
-        const resultLessThan0 = betService.createBet(
-            { userId: 1, betAmount: 10, chance: -1 },
-            {},
-        );
-        expect(resultLessThan0).rejects.toThrow(HttpException);
-
-        const resultGreaterThan1 = betService.createBet(
-            { userId: 1, betAmount: 10, chance: 1.01 },
-            {},
-        );
-        expect(resultGreaterThan1).rejects.toThrow(HttpException);
+        expect(
+            await betService.createBet(
+                { userId: 1, betAmount: 10, chance: -1 },
+                {},
+            ),
+        ).toThrow(HttpException);
+        expect(
+            await betService.createBet(
+                { userId: 1, betAmount: 10, chance: 1.01 },
+                {},
+            ),
+        ).toThrow(HttpException);
     });
 
     it('should throw if creating bet balance is insufficient', async () => {
         Object.assign(sequelize, {
-            transaction: (cb) => cb({} as Transaction),
+            transaction: (cb: (t: Transaction) => PromiseLike<Decimal>) =>
+                cb({} as Transaction),
         });
 
         jest.spyOn(userService, 'checkBalance').mockResolvedValueOnce(
             new Decimal(-100),
         );
 
-        const result = betService.createBet(
-            { userId: 1, betAmount: 10, chance: 0.5 },
-            {},
-        );
-        expect(result).rejects.toThrow(HttpException);
+        expect(
+            await betService.createBet(
+                { userId: 1, betAmount: 10, chance: 0.5 },
+                {},
+            ),
+        ).toThrow(HttpException);
     });
 
     it('should create bet and define payout', async () => {
         Object.assign(sequelize, {
-            transaction: (cb) => cb({} as Transaction),
+            transaction: (cb: (t: Transaction) => PromiseLike<Decimal>) =>
+                cb({} as Transaction),
         });
         jest.spyOn(userService, 'checkBalance').mockResolvedValue(
             new Decimal(100),
@@ -125,7 +130,7 @@ describe('BetService', () => {
             },
         );
 
-        let times: string[] = [];
+        const times: string[] = [];
 
         while (times.length < 2) {
             const result = await betService.createBet(

@@ -12,7 +12,7 @@ describe('UserService', () => {
 
     let mockEntity: UserEntity;
 
-    beforeEach(async () => {
+    beforeEach(() => {
         userRepository = UserEntity;
         sequelize = {} as unknown as Sequelize;
         mockEntity = {
@@ -39,7 +39,7 @@ describe('UserService', () => {
     it('should throw when not get user by id', async () => {
         jest.spyOn(userRepository, 'findByPk').mockResolvedValueOnce(null);
 
-        expect(userService.getUserById(1)).rejects.toThrow(HttpException);
+        expect(await userService.getUserById(1)).toThrow(HttpException);
     });
 
     it('should get all users', async () => {
@@ -66,11 +66,14 @@ describe('UserService', () => {
     it('should throw check balance by id and not find', async () => {
         jest.spyOn(userRepository, 'findByPk').mockResolvedValueOnce(null);
 
-        expect(userService.checkBalance(1)).rejects.toThrow(HttpException);
+        expect(await userService.checkBalance(1)).toThrow(HttpException);
     });
 
     it('[using transaction passed as parameter] should update balance and return new balance', async () => {
-        Object.assign(sequelize, { transaction: (cb) => cb(null) });
+        Object.assign(sequelize, {
+            transaction: (cb: (t: Transaction) => PromiseLike<Decimal>) =>
+                cb({} as Transaction),
+        });
 
         jest.spyOn(userRepository, 'findByPk').mockResolvedValueOnce(
             mockEntity,
@@ -87,7 +90,8 @@ describe('UserService', () => {
 
     it('[using transaction internal] should update balance and return new balance', async () => {
         Object.assign(sequelize, {
-            transaction: (cb) => cb({} as Transaction),
+            transaction: (cb: (t: Transaction) => PromiseLike<Decimal>) =>
+                cb({} as Transaction),
         });
 
         jest.spyOn(userRepository, 'findByPk').mockResolvedValueOnce(
